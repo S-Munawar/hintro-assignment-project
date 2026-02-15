@@ -43,11 +43,12 @@ export const useTaskStore = create<TaskState>((set, get) => ({
   createTask: async (boardId, data) => {
     const res = await apiPost<Task>(`/boards/${boardId}/tasks`, data);
     const task = res.data;
-    // Add task to the correct list in currentBoard
+    // Add task to the correct list in currentBoard (guard against duplicates from socket)
     const boardStore = useBoardStore.getState();
     if (boardStore.currentBoard?.id === boardId) {
       const lists = boardStore.currentBoard.lists.map((l) => {
         if (l.id === task.list_id) {
+          if (l.tasks.some((t) => t.id === task.id)) return l;
           return { ...l, tasks: [...l.tasks, { ...task, assignees: task.assignees ?? [] }] };
         }
         return l;
@@ -112,10 +113,13 @@ export const useTaskStore = create<TaskState>((set, get) => ({
 
   assignUser: async (boardId, taskId, userId) => {
     const res = await apiPost<TaskAssignee>(`/boards/${boardId}/tasks/${taskId}/assignees`, { user_id: userId });
-    // Update selected task
+    // Update selected task (guard against duplicates from concurrent socket events)
     const task = get().selectedTask;
     if (task?.id === taskId) {
-      set({ selectedTask: { ...task, assignees: [...(task.assignees ?? []), res.data] } });
+      const existing = task.assignees ?? [];
+      if (!existing.some((a) => a.id === res.data.id)) {
+        set({ selectedTask: { ...task, assignees: [...existing, res.data] } });
+      }
     }
     // Also update in board lists
     const boardStore = useBoardStore.getState();
@@ -124,7 +128,9 @@ export const useTaskStore = create<TaskState>((set, get) => ({
         ...l,
         tasks: l.tasks.map((t) => {
           if (t.id === taskId) {
-            return { ...t, assignees: [...(t.assignees ?? []), res.data] };
+            const curr = t.assignees ?? [];
+            if (curr.some((a) => a.id === res.data.id)) return t;
+            return { ...t, assignees: [...curr, res.data] };
           }
           return t;
         }),

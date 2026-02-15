@@ -104,9 +104,11 @@ export default function ListColumn({ list, boardId, onTaskClick }: ListColumnPro
 
       {/* Tasks */}
       <div className="flex-1 overflow-y-auto px-2 pb-2 space-y-2 min-h-[60px]" data-list-id={list.id}>
-        {list.tasks.map((task) => (
-          <TaskCard key={task.id} task={task} onClick={() => onTaskClick(task.id)} />
-        ))}
+        {list.tasks
+          .filter((t, i, arr) => arr.findIndex((x) => x.id === t.id) === i)
+          .map((task) => (
+            <TaskCard key={task.id} task={task} onClick={() => onTaskClick(task.id)} />
+          ))}
       </div>
 
       {/* Add task */}

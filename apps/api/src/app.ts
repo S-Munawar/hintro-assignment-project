@@ -11,6 +11,7 @@ import { errorHandler } from "./middleware/errorHandler.js";
 import { initSocketIO } from "./services/socketService.js";
 import boardRoutes from "./routes/boards.js";
 import taskRoutes from "./routes/tasks.js";
+import userRoutes from "./routes/users.js";
 
 // ─── Express App ─────────────────────────────────────────────────────
 
@@ -78,6 +79,7 @@ app.get("/", (_req, res) => {
 
 app.use("/api/boards", boardRoutes);
 app.use("/api/boards/:boardId/tasks", taskRoutes);
+app.use("/api/users", userRoutes);
 
 // ─── 404 Handler ─────────────────────────────────────────────────────
 

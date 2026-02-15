@@ -4,8 +4,9 @@ import { useState } from "react";
 import { useBoardStore } from "@/store/useBoardStore";
 import { useToastStore } from "@/store/useToastStore";
 import { useRouter } from "next/navigation";
-import { MoreHorizontal, Trash2, Edit3, Users, ArrowLeft, LayoutList, CheckSquare } from "lucide-react";
+import { MoreHorizontal, Trash2, Edit3, Users, ArrowLeft, LayoutList, CheckSquare, UserPlus } from "lucide-react";
 import Link from "next/link";
+import BoardMembersModal from "@/components/Board/BoardMembersModal";
 import type { BoardDetail } from "@/types";
 
 interface BoardHeaderProps {
@@ -16,6 +17,7 @@ export default function BoardHeader({ board }: BoardHeaderProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [name, setName] = useState(board.name);
   const [showMenu, setShowMenu] = useState(false);
+  const [showMembers, setShowMembers] = useState(false);
   const { updateBoard, deleteBoard } = useBoardStore();
   const { addToast } = useToastStore();
   const router = useRouter();
@@ -94,8 +96,24 @@ export default function BoardHeader({ board }: BoardHeaderProps) {
         <div className="hidden sm:flex items-center gap-1 mr-2">
           <span className="badge flex items-center gap-1"><LayoutList size={12} />{board.lists.length}</span>
           <span className="badge flex items-center gap-1"><CheckSquare size={12} />{totalTasks}</span>
-          <span className="badge flex items-center gap-1"><Users size={12} />{board.members.length + 1}</span>
+          <button
+            type="button"
+            onClick={() => setShowMembers(true)}
+            className="badge flex items-center gap-1 cursor-pointer hover:bg-slate-200 transition-colors"
+          >
+            <Users size={12} />{board.members.length + 1}
+          </button>
         </div>
+
+        {/* Add Member button */}
+        <button
+          type="button"
+          onClick={() => setShowMembers(true)}
+          className="p-2 text-slate-400 hover:text-indigo-600 hover:bg-slate-100 rounded-lg transition-colors"
+          title="Manage members"
+        >
+          <UserPlus size={18} />
+        </button>
 
         {/* Menu */}
         <div className="relative">
@@ -119,6 +137,13 @@ export default function BoardHeader({ board }: BoardHeaderProps) {
                   <Edit3 size={14} /> Rename Board
                 </button>
                 <button
+                  onClick={() => { setShowMembers(true); setShowMenu(false); }}
+                  className="dropdown-item"
+                  type="button"
+                >
+                  <Users size={14} /> Manage Members
+                </button>
+                <button
                   onClick={() => { handleDelete(); setShowMenu(false); }}
                   className="dropdown-item-danger"
                   type="button"
@@ -130,6 +155,9 @@ export default function BoardHeader({ board }: BoardHeaderProps) {
           )}
         </div>
       </div>
+
+      {/* Members Modal */}
+      <BoardMembersModal board={board} isOpen={showMembers} onClose={() => setShowMembers(false)} />
     </header>
   );
 }

@@ -53,3 +53,19 @@ export async function apiDelete<T = void>(url: string): Promise<ApiResponse<T>> 
   const res = await api.delete<ApiResponse<T>>(url);
   return res.data;
 }
+
+// ─── Domain helpers ──────────────────────────────────────────────────
+
+export interface UserSearchResult {
+  id: string;
+  email: string;
+  first_name: string;
+  last_name: string;
+  avatar_url: string | null;
+}
+
+/** Search users by email or name. */
+export async function searchUsers(query: string, limit = 10): Promise<UserSearchResult[]> {
+  const res = await apiGet<UserSearchResult[]>("/users/search", { q: query, limit });
+  return res.data;
+}

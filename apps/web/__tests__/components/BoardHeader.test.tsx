@@ -72,8 +72,9 @@ describe("BoardHeader", () => {
 
   it("should show menu when menu button is clicked", async () => {
     render(<BoardHeader board={defaultBoard} />);
-    const menuButtons = screen.getAllByRole("button");
-    await userEvent.click(menuButtons[0]!);
+    // Target the MoreHorizontal (⋯) menu button — it's the last generic button
+    const menuBtn = screen.getAllByRole("button").find((b) => !b.getAttribute("title") && !b.textContent?.trim());
+    await userEvent.click(menuBtn!);
 
     expect(screen.getByText("Rename Board")).toBeInTheDocument();
     expect(screen.getByText("Delete Board")).toBeInTheDocument();
@@ -130,8 +131,8 @@ describe("BoardHeader", () => {
     render(<BoardHeader board={defaultBoard} />);
 
     // Open menu
-    const menuButtons = screen.getAllByRole("button");
-    await userEvent.click(menuButtons[0]!);
+    const menuBtn = screen.getAllByRole("button").find((b) => !b.getAttribute("title") && !b.textContent?.trim());
+    await userEvent.click(menuBtn!);
     await userEvent.click(screen.getByText("Delete Board"));
 
     await waitFor(() => {
@@ -143,8 +144,8 @@ describe("BoardHeader", () => {
     mockDeleteBoard.mockResolvedValue({});
     render(<BoardHeader board={defaultBoard} />);
 
-    const menuButtons = screen.getAllByRole("button");
-    await userEvent.click(menuButtons[0]!);
+    const menuBtn = screen.getAllByRole("button").find((b) => !b.getAttribute("title") && !b.textContent?.trim());
+    await userEvent.click(menuBtn!);
     await userEvent.click(screen.getByText("Delete Board"));
 
     await waitFor(() => {
@@ -171,8 +172,8 @@ describe("BoardHeader", () => {
     mockDeleteBoard.mockRejectedValue(new Error("fail"));
     render(<BoardHeader board={defaultBoard} />);
 
-    const menuButtons = screen.getAllByRole("button");
-    await userEvent.click(menuButtons[0]!);
+    const menuBtn = screen.getAllByRole("button").find((b) => !b.getAttribute("title") && !b.textContent?.trim());
+    await userEvent.click(menuBtn!);
     await userEvent.click(screen.getByText("Delete Board"));
 
     await waitFor(() => {

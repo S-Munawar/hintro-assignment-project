@@ -38,4 +38,5 @@ export {
   PaginationQuery,
   TaskFilterQuery,
   ActivityFilterQuery,
+  UserSearchQuery,
 } from "./inputs.js";

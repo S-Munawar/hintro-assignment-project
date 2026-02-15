@@ -113,3 +113,11 @@ export const ActivityFilterQuery = PaginationQuery.extend({
   task_id: uuidSchema.optional(),
 });
 export type ActivityFilterQuery = z.infer<typeof ActivityFilterQuery>;
+
+// ── User Search ──────────────────────────────────────────────────────
+
+export const UserSearchQuery = z.object({
+  q: z.string().min(1).max(255),
+  limit: z.coerce.number().int().positive().max(20).default(10),
+});
+export type UserSearchQuery = z.infer<typeof UserSearchQuery>;
