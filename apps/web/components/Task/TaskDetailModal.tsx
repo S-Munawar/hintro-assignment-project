@@ -98,12 +98,14 @@ export default function TaskDetailModal({ boardId, taskId, isOpen, onClose }: Ta
   const boardMembers = currentBoard
     ? [
         { id: currentBoard.owner.id, first_name: currentBoard.owner.first_name, last_name: currentBoard.owner.last_name, email: currentBoard.owner.email },
-        ...currentBoard.members.map((m) => ({
-          id: m.user.id,
-          first_name: m.user.first_name,
-          last_name: m.user.last_name,
-          email: m.user.email ?? "",
-        })),
+        ...currentBoard.members
+          .filter((m) => m.user.id !== currentBoard.owner.id)
+          .map((m) => ({
+            id: m.user.id,
+            first_name: m.user.first_name,
+            last_name: m.user.last_name,
+            email: m.user.email ?? "",
+          })),
       ]
     : [];
 
@@ -254,7 +256,7 @@ export default function TaskDetailModal({ boardId, taskId, isOpen, onClose }: Ta
                 <div>
                   <h4 className="text-[10px] font-semibold uppercase text-slate-400 tracking-widest mb-2">Assignees</h4>
                   <div className="space-y-1.5">
-                    {(selectedTask.assignees ?? []).filter((a, i, arr) => arr.findIndex((x) => x.id === a.id) === i).map((a) => (
+                    {(selectedTask.assignees ?? []).filter((a, i, arr) => arr.findIndex((x) => x.user_id === a.user_id) === i).map((a) => (
                       <div key={a.id} className="flex items-center justify-between group/assignee">
                         <div className="flex items-center gap-2">
                           <div className="avatar avatar-xs bg-indigo-100 text-indigo-700">

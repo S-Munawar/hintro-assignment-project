@@ -14,6 +14,9 @@ interface TaskCardProps {
 
 export default function TaskCard({ task, onClick, isOverlay }: TaskCardProps) {
   const isOverdue = task.due_date && new Date(task.due_date) < new Date();
+  const uniqueAssignees = (task.assignees ?? []).filter(
+    (a, i, arr) => arr.findIndex((x) => x.user_id === a.user_id) === i,
+  );
 
   const {
     attributes,
@@ -74,9 +77,9 @@ export default function TaskCard({ task, onClick, isOverlay }: TaskCardProps) {
         )}
 
         {/* Assignees */}
-        {task.assignees && task.assignees.length > 0 && (
+        {uniqueAssignees.length > 0 && (
           <div className="flex items-center -space-x-1.5 ml-auto">
-            {task.assignees.slice(0, 3).map((a) => (
+            {uniqueAssignees.slice(0, 3).map((a) => (
               <div
                 key={a.id}
                 className="avatar avatar-xs bg-indigo-100 text-indigo-700 border-2 border-white"
@@ -85,8 +88,8 @@ export default function TaskCard({ task, onClick, isOverlay }: TaskCardProps) {
                 {a.user.first_name[0]}
               </div>
             ))}
-            {task.assignees.length > 3 && (
-              <span className="text-[10px] text-slate-400 ml-1.5">+{task.assignees.length - 3}</span>
+            {uniqueAssignees.length > 3 && (
+              <span className="text-[10px] text-slate-400 ml-1.5">+{uniqueAssignees.length - 3}</span>
             )}
           </div>
         )}

@@ -22,10 +22,10 @@ importers:
     dependencies:
       '@prisma/client':
         specifier: ^6.8.0
-        version: 6.19.2(prisma@6.19.2(typescript@5.9.2))(typescript@5.9.2)
+        version: 6.19.2(prisma@6.19.2(magicast@0.5.2)(typescript@5.9.2))(typescript@5.9.2)
       '@prisma/extension-accelerate':
         specifier: ^3.0.1
-        version: 3.0.1(@prisma/client@6.19.2(prisma@6.19.2(typescript@5.9.2))(typescript@5.9.2))
+        version: 3.0.1(@prisma/client@6.19.2(prisma@6.19.2(magicast@0.5.2)(typescript@5.9.2))(typescript@5.9.2))
       '@repo/shared':
         specifier: workspace:*
         version: link:../../packages/shared
@@ -95,16 +95,16 @@ importers:
         version: 10.0.0
       eslint:
         specifier: ^9.39.1
-        version: 9.39.1(jiti@2.6.1)
+        version: 9.39.1(jiti@1.21.7)
       jest:
         specifier: ^30.2.0
         version: 30.2.0(@types/node@22.15.3)(ts-node@10.9.2(@types/node@22.15.3)(typescript@5.9.2))
       prisma:
         specifier: ^6.8.0
-        version: 6.19.2(typescript@5.9.2)
+        version: 6.19.2(magicast@0.5.2)(typescript@5.9.2)
       prisma-erd-generator:
         specifier: ^2.4.2
-        version: 2.4.2(@babel/core@7.29.0)(@babel/template@7.28.6)(@prisma/client@6.19.2(prisma@6.19.2(typescript@5.9.2))(typescript@5.9.2))(@types/react@19.2.2)(puppeteer@23.11.1(typescript@5.9.2))(tsx@4.21.0)
+        version: 2.4.2(@babel/core@7.29.0)(@babel/template@7.28.6)(@prisma/client@6.19.2(prisma@6.19.2(magicast@0.5.2)(typescript@5.9.2))(typescript@5.9.2))(@types/react@19.2.2)(puppeteer@23.11.1(typescript@5.9.2))(tsx@4.21.0)
       supertest:
         specifier: ^7.2.2
         version: 7.2.2
@@ -227,6 +227,9 @@ importers:
       '@vitejs/plugin-react':
         specifier: ^5.1.4
         version: 5.1.4(vite@7.3.1(@types/node@22.15.3)(jiti@1.21.7)(tsx@4.21.0))
+      '@vitest/coverage-v8':
+        specifier: 4.0.18
+        version: 4.0.18(vitest@4.0.18(@types/node@22.15.3)(jiti@1.21.7)(jsdom@28.1.0(@noble/hashes@1.8.0))(tsx@4.21.0))
       autoprefixer:
         specifier: ^10.4.20
         version: 10.4.24(postcss@8.5.6)
@@ -538,6 +541,10 @@ packages:
 
   '@bcoe/v8-coverage@0.2.3':
     resolution: {integrity: sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==}
+
+  '@bcoe/v8-coverage@1.0.2':
+    resolution: {integrity: sha512-6zABk/ECA/QYSCQ1NGiVwwbQerUCZ+TQbp64Q3AgmfNvurHH0j8TtXa1qbShXA6qqkpAj4V5W8pP6mLe1mcMqA==}
+    engines: {node: '>=18'}
 
   '@braintree/sanitize-url@7.1.2':
     resolution: {integrity: sha512-jigsZK+sMF/cuiB7sERuo9V7N9jx+dhmHHnQyDSVdpZwVutaBu7WvNYqMDLSgFgfB30n452TP3vjDAvFC973mA==}
@@ -1935,6 +1942,15 @@ packages:
     peerDependencies:
       vite: ^4.2.0 || ^5.0.0 || ^6.0.0 || ^7.0.0
 
+  '@vitest/coverage-v8@4.0.18':
+    resolution: {integrity: sha512-7i+N2i0+ME+2JFZhfuz7Tg/FqKtilHjGyGvoHYQ6iLV0zahbsJ9sljC9OcFcPDbhYKCet+sG8SsVqlyGvPflZg==}
+    peerDependencies:
+      '@vitest/browser': 4.0.18
+      vitest: 4.0.18
+    peerDependenciesMeta:
+      '@vitest/browser':
+        optional: true
+
   '@vitest/expect@4.0.18':
     resolution: {integrity: sha512-8sCWUyckXXYvx4opfzVY03EOiYVxyNrHS5QxX3DAIi5dpJAAkyJezHCP77VMX4HKA2LDT/Jpfo8i2r5BE3GnQQ==}
 
@@ -2096,6 +2112,9 @@ packages:
   ast-types@0.13.4:
     resolution: {integrity: sha512-x1FCFnFifvYDDzTaLII71vG5uvDwgtmDTEVWAxrgeiR8VjMONcCXJx7E+USjDtHlwFmt9MysbqgF9b9Vjr6w+w==}
     engines: {node: '>=4'}
+
+  ast-v8-to-istanbul@0.3.11:
+    resolution: {integrity: sha512-Qya9fkoofMjCBNVdWINMjB5KZvkYfaO9/anwkWnjxibpWUxo5iHl2sOdP7/uAqaRuUYuoo8rDwnbaaKVFxoUvw==}
 
   async-function@1.0.0:
     resolution: {integrity: sha512-hsU18Ae8CDTR6Kgu9DYf0EbCr/a5iGL0rytQDobUcdpYOKokk8LEjVphnXkDkgpi0wYVsqrXuP0bZxJaTqdgoA==}
@@ -3709,6 +3728,9 @@ packages:
       react:
         optional: true
 
+  js-tokens@10.0.0:
+    resolution: {integrity: sha512-lM/UBzQmfJRo9ABXbPWemivdCW8V2G8FHaHdypQaIy523snUjog0W71ayWXTjiR+ixeMyVHN2XcpnTd/liPg/Q==}
+
   js-tokens@4.0.0:
     resolution: {integrity: sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==}
 
@@ -3840,6 +3862,9 @@ packages:
 
   magic-string@0.30.21:
     resolution: {integrity: sha512-vd2F4YUyEXKGcLHoq+TEyCjxueSeHnFxyyjNp80yg0XV4vUhnDer/lvvlqM/arB5bXQN5K2/3oinyCRyx8T2CQ==}
+
+  magicast@0.5.2:
+    resolution: {integrity: sha512-E3ZJh4J3S9KfwdjZhe2afj6R9lGIN5Pher1pF39UGrXRqq/VDaGVIGN13BjHd2u8B61hArAGOnso7nBOouW3TQ==}
 
   make-dir@4.0.0:
     resolution: {integrity: sha512-hXdUTZYIVOt1Ex//jAQi+wTZZpUpwBj/0QsOzqegb3rGMMeJiSEu5xLHnYfBrRV4RH2+OCSOO95Is/7x1WJ4bw==}
@@ -5571,6 +5596,8 @@ snapshots:
 
   '@bcoe/v8-coverage@0.2.3': {}
 
+  '@bcoe/v8-coverage@1.0.2': {}
+
   '@braintree/sanitize-url@7.1.2': {}
 
   '@bramus/specificity@2.4.2':
@@ -6269,14 +6296,14 @@ snapshots:
 
   '@pkgr/core@0.2.9': {}
 
-  '@prisma/client@6.19.2(prisma@6.19.2(typescript@5.9.2))(typescript@5.9.2)':
+  '@prisma/client@6.19.2(prisma@6.19.2(magicast@0.5.2)(typescript@5.9.2))(typescript@5.9.2)':
     optionalDependencies:
-      prisma: 6.19.2(typescript@5.9.2)
+      prisma: 6.19.2(magicast@0.5.2)(typescript@5.9.2)
       typescript: 5.9.2
 
-  '@prisma/config@6.19.2':
+  '@prisma/config@6.19.2(magicast@0.5.2)':
     dependencies:
-      c12: 3.1.0
+      c12: 3.1.0(magicast@0.5.2)
       deepmerge-ts: 7.1.5
       effect: 3.18.4
       empathic: 2.0.0
@@ -6298,9 +6325,9 @@ snapshots:
       '@prisma/fetch-engine': 6.19.2
       '@prisma/get-platform': 6.19.2
 
-  '@prisma/extension-accelerate@3.0.1(@prisma/client@6.19.2(prisma@6.19.2(typescript@5.9.2))(typescript@5.9.2))':
+  '@prisma/extension-accelerate@3.0.1(@prisma/client@6.19.2(prisma@6.19.2(magicast@0.5.2)(typescript@5.9.2))(typescript@5.9.2))':
     dependencies:
-      '@prisma/client': 6.19.2(prisma@6.19.2(typescript@5.9.2))(typescript@5.9.2)
+      '@prisma/client': 6.19.2(prisma@6.19.2(magicast@0.5.2)(typescript@5.9.2))(typescript@5.9.2)
 
   '@prisma/fetch-engine@6.19.2':
     dependencies:
@@ -7004,6 +7031,20 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
+  '@vitest/coverage-v8@4.0.18(vitest@4.0.18(@types/node@22.15.3)(jiti@1.21.7)(jsdom@28.1.0(@noble/hashes@1.8.0))(tsx@4.21.0))':
+    dependencies:
+      '@bcoe/v8-coverage': 1.0.2
+      '@vitest/utils': 4.0.18
+      ast-v8-to-istanbul: 0.3.11
+      istanbul-lib-coverage: 3.2.2
+      istanbul-lib-report: 3.0.1
+      istanbul-reports: 3.2.0
+      magicast: 0.5.2
+      obug: 2.1.1
+      std-env: 3.10.0
+      tinyrainbow: 3.0.3
+      vitest: 4.0.18(@types/node@22.15.3)(jiti@1.21.7)(jsdom@28.1.0(@noble/hashes@1.8.0))(tsx@4.21.0)
+
   '@vitest/expect@4.0.18':
     dependencies:
       '@standard-schema/spec': 1.1.0
@@ -7215,6 +7256,12 @@ snapshots:
     dependencies:
       tslib: 2.8.1
 
+  ast-v8-to-istanbul@0.3.11:
+    dependencies:
+      '@jridgewell/trace-mapping': 0.3.31
+      estree-walker: 3.0.3
+      js-tokens: 10.0.0
+
   async-function@1.0.0: {}
 
   asynckit@0.4.0: {}
@@ -7412,7 +7459,7 @@ snapshots:
 
   bytes@3.1.2: {}
 
-  c12@3.1.0:
+  c12@3.1.0(magicast@0.5.2):
     dependencies:
       chokidar: 4.0.3
       confbox: 0.2.4
@@ -7426,6 +7473,8 @@ snapshots:
       perfect-debounce: 1.0.0
       pkg-types: 2.3.0
       rc9: 2.1.2
+    optionalDependencies:
+      magicast: 0.5.2
 
   call-bind-apply-helpers@1.0.2:
     dependencies:
@@ -9244,6 +9293,8 @@ snapshots:
       '@types/react': 19.2.2
       react: 19.2.4
 
+  js-tokens@10.0.0: {}
+
   js-tokens@4.0.0: {}
 
   js-yaml@3.14.2:
@@ -9375,6 +9426,12 @@ snapshots:
   magic-string@0.30.21:
     dependencies:
       '@jridgewell/sourcemap-codec': 1.5.5
+
+  magicast@0.5.2:
+    dependencies:
+      '@babel/parser': 7.29.0
+      '@babel/types': 7.29.0
+      source-map-js: 1.2.1
 
   make-dir@4.0.0:
     dependencies:
@@ -9830,10 +9887,10 @@ snapshots:
       ansi-styles: 5.2.0
       react-is: 18.3.1
 
-  prisma-erd-generator@2.4.2(@babel/core@7.29.0)(@babel/template@7.28.6)(@prisma/client@6.19.2(prisma@6.19.2(typescript@5.9.2))(typescript@5.9.2))(@types/react@19.2.2)(puppeteer@23.11.1(typescript@5.9.2))(tsx@4.21.0):
+  prisma-erd-generator@2.4.2(@babel/core@7.29.0)(@babel/template@7.28.6)(@prisma/client@6.19.2(prisma@6.19.2(magicast@0.5.2)(typescript@5.9.2))(typescript@5.9.2))(@types/react@19.2.2)(puppeteer@23.11.1(typescript@5.9.2))(tsx@4.21.0):
     dependencies:
       '@mermaid-js/mermaid-cli': 11.12.0(@babel/core@7.29.0)(@babel/template@7.28.6)(@types/react@19.2.2)(puppeteer@23.11.1(typescript@5.9.2))(tsx@4.21.0)
-      '@prisma/client': 6.19.2(prisma@6.19.2(typescript@5.9.2))(typescript@5.9.2)
+      '@prisma/client': 6.19.2(prisma@6.19.2(magicast@0.5.2)(typescript@5.9.2))(typescript@5.9.2)
       '@prisma/generator-helper': 7.4.0
       dotenv: 16.6.1
     transitivePeerDependencies:
@@ -9844,9 +9901,9 @@ snapshots:
       - tsx
       - yaml
 
-  prisma@6.19.2(typescript@5.9.2):
+  prisma@6.19.2(magicast@0.5.2)(typescript@5.9.2):
     dependencies:
-      '@prisma/config': 6.19.2
+      '@prisma/config': 6.19.2(magicast@0.5.2)
       '@prisma/engines': 6.19.2
     optionalDependencies:
       typescript: 5.9.2

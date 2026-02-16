@@ -249,6 +249,19 @@ Production runs on a **Google Compute Engine** VM with Docker Compose.
 
 ---
 
+## Demo Credentials
+
+Test accounts are pre-configured for quick exploration:
+
+| Role       | Email                  | Password        |
+| ---------- | ---------------------- | --------------- |
+| Owner      | `owner@demo.com`       | `Owner@123`     |
+| Assignee 1 | `assignee1@demo.com`   | `Assignee1@123` |
+| Assignee 2 | `assignee2@demo.com`   | `Assignee2@123` |
+| Assignee 3 | `assignee3@demo.com`   | `Assignee3@123` |
+
+---
+
 ## API Documentation
 
 Full REST API reference is available in [`docs/API.md`](docs/API.md).
