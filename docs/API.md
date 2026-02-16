@@ -66,7 +66,7 @@ const token = session?.access_token;
 
 ### Backend verification
 
-The API verifies tokens by calling `supabase.auth.getUser(token)` via the Supabase admin client. If valid, the user's UUID is attached to the request as `req.userId`.
+The `authMiddleware` creates a per-request Supabase client (using the anon key and the caller's Bearer token) and calls `supabase.auth.getUser(token)` to verify the JWT. If valid, the user's UUID is attached to the request as `req.userId`. A profile row is auto-created in the database if one does not already exist.
 
 ---
 
@@ -189,7 +189,8 @@ List all boards the authenticated user is a member of (or owns).
       "is_archived": false,
       "created_at": "2026-02-16T12:00:00.000Z",
       "updated_at": "2026-02-16T12:00:00.000Z",
-      "_count": { "members": 3 }
+      "owner": { "id": "uuid", "first_name": "John", "last_name": "Doe", "email": "john@example.com" },
+      "_count": { "members": 3, "lists": 4 }
     }
   ],
   "pagination": { "page": 1, "limit": 10, "total": 5, "pages": 1 }
@@ -200,7 +201,7 @@ List all boards the authenticated user is a member of (or owns).
 
 #### `POST /api/boards`
 
-Create a new board. The authenticated user becomes the owner and an admin member.
+Create a new board. The authenticated user becomes the owner. Three default lists (To Do, In Progress, Done) are created automatically.
 
 **Auth:** Required  
 **Body:** [CreateBoardInput](#createboardinput)
@@ -232,7 +233,13 @@ Create a new board. The authenticated user becomes the owner and an admin member
     "color": "#FF6B35",
     "is_archived": false,
     "created_at": "2026-02-16T12:00:00.000Z",
-    "updated_at": "2026-02-16T12:00:00.000Z"
+    "updated_at": "2026-02-16T12:00:00.000Z",
+    "lists": [
+      { "id": "uuid", "name": "To Do", "position": 0 },
+      { "id": "uuid", "name": "In Progress", "position": 1 },
+      { "id": "uuid", "name": "Done", "position": 2 }
+    ],
+    "owner": { "id": "uuid", "first_name": "John", "last_name": "Doe", "email": "john@example.com" }
   },
   "message": "Board created successfully"
 }
@@ -272,14 +279,14 @@ Get board details with all lists and their tasks.
             "priority": "medium",
             "is_completed": false,
             "assignees": [
-              { "id": "uuid", "user": { "id": "uuid", "first_name": "John", "last_name": "Doe" } }
+              { "id": "uuid", "user": { "id": "uuid", "first_name": "John", "last_name": "Doe", "avatar_url": "https://..." } }
             ]
           }
         ]
       }
     ],
     "members": [
-      { "id": "uuid", "user_id": "uuid", "role": "admin", "user": { "first_name": "John", "last_name": "Doe", "email": "john@example.com" } }
+      { "id": "uuid", "user_id": "uuid", "role": "admin", "user": { "id": "uuid", "first_name": "John", "last_name": "Doe", "email": "john@example.com", "avatar_url": "https://..." } }
     ]
   }
 }
@@ -292,7 +299,7 @@ Get board details with all lists and their tasks.
 Update a board.
 
 **Auth:** Required  
-**Role:** `admin`  
+**Role:** Board owner only (service-layer ownership check)  
 **Body:** [UpdateBoardInput](#updateboardinput)
 
 ```json
@@ -1132,7 +1139,7 @@ GET /api/boards?page=2&limit=20&sort=created_at&order=desc
 | `GET` | `/api/boards` | auth | List boards |
 | `POST` | `/api/boards` | auth | Create board |
 | `GET` | `/api/boards/:boardId` | member | Get board |
-| `PUT` | `/api/boards/:boardId` | admin | Update board |
+| `PUT` | `/api/boards/:boardId` | owner | Update board |
 | `DELETE` | `/api/boards/:boardId` | owner | Delete board |
 | `POST` | `/api/boards/:boardId/members` | admin | Add member |
 | `DELETE` | `/api/boards/:boardId/members/:userId` | member | Remove member |

@@ -117,7 +117,7 @@ export const useTaskStore = create<TaskState>((set, get) => ({
     const task = get().selectedTask;
     if (task?.id === taskId) {
       const existing = task.assignees ?? [];
-      if (!existing.some((a) => a.id === res.data.id)) {
+      if (!existing.some((a) => a.id === res.data.id || a.user_id === res.data.user_id)) {
         set({ selectedTask: { ...task, assignees: [...existing, res.data] } });
       }
     }
@@ -129,7 +129,7 @@ export const useTaskStore = create<TaskState>((set, get) => ({
         tasks: l.tasks.map((t) => {
           if (t.id === taskId) {
             const curr = t.assignees ?? [];
-            if (curr.some((a) => a.id === res.data.id)) return t;
+            if (curr.some((a) => a.id === res.data.id || a.user_id === res.data.user_id)) return t;
             return { ...t, assignees: [...curr, res.data] };
           }
           return t;

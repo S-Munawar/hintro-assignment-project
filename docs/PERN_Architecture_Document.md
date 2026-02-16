@@ -274,7 +274,7 @@ apps/api/
 | GET | `/api/boards` | ✓ | any | List user's boards (paginated) |
 | POST | `/api/boards` | ✓ | any | Create new board |
 | GET | `/api/boards/:boardId` | ✓ | member | Get board with lists & tasks |
-| PUT | `/api/boards/:boardId` | ✓ | admin | Update board |
+| PUT | `/api/boards/:boardId` | ✓ | owner | Update board |
 | DELETE | `/api/boards/:boardId` | ✓ | owner | Delete board |
 
 #### Members
@@ -352,8 +352,8 @@ All input validation is handled by Zod schemas in `packages/shared/src/schemas/`
 
 **Backend Verification:**
 1. `authMiddleware` extracts Bearer token from `Authorization` header
-2. Calls `supabase.auth.getUser(token)` via Supabase admin client
-3. Attaches `req.userId` from token claims
+2. Creates a per-request Supabase client (anon key + caller's Bearer token) and calls `supabase.auth.getUser(token)`
+3. Auto-creates a profile row if one does not exist, then attaches `req.userId`
 4. `authorize()` middleware checks `board_members` table for role-based access
 
 ### 3.6 Service Layer

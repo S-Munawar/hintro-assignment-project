@@ -17,7 +17,15 @@ COPY --from=deps /app/apps/api/node_modules ./apps/api/node_modules
 COPY --from=deps /app/packages ./packages
 COPY apps/api ./apps/api
 COPY packages ./packages
+RUN cd packages/shared && pnpm build
 RUN cd apps/api && pnpm prisma generate && pnpm build
+
+# Deploy — use pnpm deploy to create a standalone directory with real files
+RUN pnpm --filter api deploy --prod /app/deployed
+# Copy the generated Prisma client (with engine) over the stubs in deployed
+RUN PRISMA_DEST=$(find /app/deployed/node_modules/.pnpm -path '*/@prisma+client*/node_modules/.prisma/client' -type d | head -1) && \
+    PRISMA_SRC=$(find /app/node_modules/.pnpm -path '*/@prisma+client*/node_modules/.prisma/client' -type d | head -1) && \
+    rm -rf "$PRISMA_DEST" && cp -r "$PRISMA_SRC" "$PRISMA_DEST"
 
 # Production
 FROM node:20-alpine AS runner
@@ -28,13 +36,10 @@ ENV NODE_ENV=production
 RUN addgroup --system --gid 1001 nodejs && \
     adduser --system --uid 1001 appuser
 
+COPY --from=builder /app/deployed/node_modules ./node_modules
 COPY --from=builder /app/apps/api/dist ./dist
-COPY --from=builder /app/apps/api/prisma ./prisma
-COPY --from=builder /app/apps/api/package.json ./
-COPY --from=builder /app/apps/api/node_modules ./node_modules
-# Prisma generated client lives inside node_modules/.prisma
-COPY --from=builder /app/node_modules/.pnpm/@prisma+client*/node_modules/.prisma ./node_modules/.prisma
-COPY --from=builder /app/node_modules/.pnpm/@prisma+client*/node_modules/@prisma/client ./node_modules/@prisma/client
+COPY --from=builder /app/deployed/prisma ./prisma
+COPY --from=builder /app/deployed/package.json ./
 
 USER appuser
 EXPOSE 5000

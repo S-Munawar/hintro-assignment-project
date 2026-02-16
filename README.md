@@ -163,7 +163,7 @@ docker compose logs -f api web
 | `api`   | 5000 | Express API + Socket.IO |
 | `web`   | 3000 | Next.js frontend        |
 
-> Production deployment uses **Google Cloud Run** — see [Deployment](#deployment) below.
+> Production deployment uses **Google Compute Engine** — see [Deployment](#deployment) below.
 
 ---
 
@@ -246,6 +246,19 @@ Production runs on a **Google Compute Engine** VM with Docker Compose.
 | Database  | Prisma Postgres (managed)             |
 | Images    | Docker Hub                            |
 | Auth      | Supabase (managed)                    |
+
+---
+
+## Demo Credentials
+
+Test accounts are pre-configured for quick exploration:
+
+| Role       | Email                  | Password        |
+| ---------- | ---------------------- | --------------- |
+| Owner      | `owner@demo.com`       | `Owner@123`     |
+| Assignee 1 | `assignee1@demo.com`   | `Assignee1@123` |
+| Assignee 2 | `assignee2@demo.com`   | `Assignee2@123` |
+| Assignee 3 | `assignee3@demo.com`   | `Assignee3@123` |
 
 ---
 
